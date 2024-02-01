@@ -42,20 +42,52 @@ export const todosSlice = createSlice({
       state.items = filtered;
     },
   },
-  extraReducers: {
-    [getTodosAsync.pending]: (state, action) => {
-      state.isLoading = true;
-    },
-    [getTodosAsync.fulfilled]: (state, action) => {
-      state.items = action.payload;
-      state.isLoading = false;
-    },
-    [getTodosAsync.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.error.message;
-    }
+  extraReducers: (builder) => {
+    builder
+      .addCase(getTodosAsync.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getTodosAsync.fulfilled, (state, action) => {
+        state.items = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(getTodosAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      });
   },
 });
 export const { addTodo, toggle, destroy, changeActiveFilter, clearCompleted } =
   todosSlice.actions;
 export default todosSlice.reducer;
+
+// ! This is your old code
+// extraReducers: {
+//   [getTodosAsync.pending]: (state, action) => {
+//     state.isLoading = true;
+//   },
+//   [getTodosAsync.fulfilled]: (state, action) => {
+//     state.items = action.payload;
+//     state.isLoading = false;
+//   },
+//   [getTodosAsync.rejected]: (state, action) => {
+//     state.isLoading = false;
+//     state.error = action.error.message;
+//   }
+// },
+
+//* This is updated code, at the new version of redux it's used builder callback function so you have to add only call back which called builder that's it
+// extraReducers: (builder) => {
+//   builder
+//     .addCase(getTodosAsync.pending, (state) => {
+//       state.isLoading = true;
+//     })
+//     .addCase(getTodosAsync.fulfilled, (state, action) => {
+//       state.items = action.payload;
+//       state.isLoading = false;
+//     })
+//     .addCase(getTodosAsync.rejected, (state, action) => {
+//       state.isLoading = false;
+//       state.error = action.error.message;
+//     });
+// },
